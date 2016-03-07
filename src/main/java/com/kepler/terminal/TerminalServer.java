@@ -1,9 +1,5 @@
 package com.kepler.terminal;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,7 +7,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.kepler.KeplerLocalException;
 import com.kepler.config.Config;
 import com.kepler.config.ConfigSync;
 import com.kepler.config.PropertiesUtils;
@@ -41,16 +36,6 @@ public class TerminalServer {
 	 * 本地默认端口
 	 */
 	private static final int PORT = PropertiesUtils.get(TerminalServer.class.getName().toLowerCase() + ".port", 8888);
-
-	/**
-	 * 本地端口嗅探范围
-	 */
-	private final static int RANGE = PropertiesUtils.get(TerminalServer.class.getName().toLowerCase() + ".range", 1000);
-
-	/**
-	 * 本地端口嗅探间隔
-	 */
-	private final static int INTERVAL = PropertiesUtils.get(TerminalServer.class.getName().toLowerCase() + ".interval", 500);
 
 	/**
 	 * 退出命令
@@ -92,7 +77,7 @@ public class TerminalServer {
 				        ch.pipeline().addLast(new LineBasedFrameDecoder(TerminalServer.CMD_MAX_LENGTH, true, true))
 				                .addLast(new StringDecoder()).addLast(new StringEncoder()).addLast(new ConfigHandler());
 			        }
-		        }).option(ChannelOption.SO_REUSEADDR, true).bind(TerminalServer.LOOP, this.availablePort()).sync();
+		        }).option(ChannelOption.SO_REUSEADDR, true).bind(TerminalServer.LOOP, TerminalServer.PORT).sync();
 
 	}
 
@@ -102,18 +87,6 @@ public class TerminalServer {
 		}
 		this.bootstrap.group().shutdownGracefully().sync();
 		TerminalServer.LOGGER.warn("Terminal Server shutdown ... ");
-	}
-
-	private int availablePort() throws Exception {
-		for (int index = TerminalServer.PORT; index < TerminalServer.PORT + TerminalServer.RANGE; index++) {
-			try (Socket socket = new Socket()) {
-				socket.connect(new InetSocketAddress(InetAddress.getByName(TerminalServer.LOOP), index), TerminalServer.INTERVAL);
-			} catch (IOException e) {
-				TerminalServer.LOGGER.info("Port " + index + " used for terminal server ");
-				return index;
-			}
-		}
-		throw new KeplerLocalException("Cannot allocate port for terminal server");
 	}
 
 	private class ConfigHandler extends ChannelInboundHandlerAdapter {
