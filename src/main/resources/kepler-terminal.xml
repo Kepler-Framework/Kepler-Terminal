@@ -5,9 +5,7 @@
 	http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<bean class="com.kepler.terminal.TerminalServer" init-method="init" destroy-method="destroy">
-		<constructor-arg ref="kepler.serials" />
-		<constructor-arg ref="kepler.host.local" />
-		<constructor-arg ref="kepler.zookeeper.factory" />
+		<constructor-arg ref="kepler.zookeeper.context" />
 		<constructor-arg ref="kepler.config" />
 	</bean>
 

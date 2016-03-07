@@ -13,11 +13,8 @@ import org.apache.commons.logging.LogFactory;
 
 import com.kepler.KeplerLocalException;
 import com.kepler.config.Config;
+import com.kepler.config.ConfigSync;
 import com.kepler.config.PropertiesUtils;
-import com.kepler.host.impl.ServerHost;
-import com.kepler.serial.Serials;
-import com.kepler.zookeeper.ZkClient;
-
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -74,18 +71,12 @@ public class TerminalServer {
 
 	private final ServerBootstrap bootstrap = new ServerBootstrap();
 
-	private final ServerHost local;
-
-	private final Serials serials;
-
-	private final ZkClient zoo;
+	private final ConfigSync configSync;
 
 	private final Config config;
 
-	public TerminalServer(Serials serials, ServerHost local, ZkClient zoo, Config config) {
-		this.serials = serials;
-		this.local = local;
-		this.zoo = zoo;
+	public TerminalServer(ConfigSync configSync, Config config) {
+		this.configSync = configSync;
 		this.config = config;
 	}
 
@@ -196,7 +187,7 @@ public class TerminalServer {
 			Map<String, String> configs = PropertiesUtils.properties();
 			configs.put(this.key, this.value);
 			TerminalServer.this.config.config(configs);
-			// TODO update zk
+			TerminalServer.this.configSync.sync();
 		}
 
 		public boolean valid() {
