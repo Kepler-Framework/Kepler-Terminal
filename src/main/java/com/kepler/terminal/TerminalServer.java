@@ -22,6 +22,10 @@ import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
+/**
+ * @author longyaokun 2016-03-07
+ *
+ */
 public class TerminalServer {
 
 	private static final Log LOGGER = LogFactory.getLog(TerminalServer.class);
