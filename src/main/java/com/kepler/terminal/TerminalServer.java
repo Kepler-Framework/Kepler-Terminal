@@ -36,6 +36,11 @@ public class TerminalServer {
 	 * 本地默认端口
 	 */
 	private static final int PORT = PropertiesUtils.get(TerminalServer.class.getName().toLowerCase() + ".port", 8888);
+	
+	/**
+	 * 默认綁定的IP
+	 */
+	private static final String IP = PropertiesUtils.get(TerminalServer.class.getName().toLowerCase() + ".ip", TerminalServer.LOOP);
 
 	/**
 	 * 退出命令
@@ -77,7 +82,7 @@ public class TerminalServer {
 				        ch.pipeline().addLast(new LineBasedFrameDecoder(TerminalServer.CMD_MAX_LENGTH, true, true))
 				                .addLast(new StringDecoder()).addLast(new StringEncoder()).addLast(new ConfigHandler());
 			        }
-		        }).option(ChannelOption.SO_REUSEADDR, true).bind(TerminalServer.LOOP, TerminalServer.PORT).sync();
+		        }).option(ChannelOption.SO_REUSEADDR, true).bind(TerminalServer.IP, TerminalServer.PORT).sync();
 
 	}
 
