@@ -49,7 +49,7 @@
 + com.kepler.terminal.TerminalServer.ip   
   `String型，默认127.0.0.1。terminal 服务綁定的本地ip`  
   `作用于Server` 
- + com.kepler.terminal.TerminalServer.cmd_max_length   
++ com.kepler.terminal.TerminalServer.cmd_max_length   
   `int型，默认1024。命令的最大长度`  
   `作用于Server` 
 
