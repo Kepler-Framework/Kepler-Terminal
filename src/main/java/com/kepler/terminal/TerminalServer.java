@@ -113,7 +113,6 @@ public class TerminalServer {
 			if (!command.valid()) {
 				ctx.writeAndFlush(TerminalServer.USAGE);
 			} else {
-				command.execute();
 				String response = command.execute() ? "command executed!\n" : "command failed!\n";
 				ctx.writeAndFlush(response);
 			}
