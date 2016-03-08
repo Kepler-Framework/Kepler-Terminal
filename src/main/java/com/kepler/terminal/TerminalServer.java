@@ -103,7 +103,7 @@ public class TerminalServer {
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object msg) {
 			String cmdLine = String.class.cast(msg);
-			TerminalServer.LOGGER.info("Recieve the command:" + cmdLine);
+			TerminalServer.LOGGER.info("Receive the command:" + cmdLine);
 			if (TerminalServer.CMD_QUIT.equalsIgnoreCase(cmdLine)) {
 				ctx.writeAndFlush("Exit...");
 				ctx.close();
@@ -114,7 +114,7 @@ public class TerminalServer {
 				ctx.writeAndFlush(TerminalServer.USAGE);
 			} else {
 				command.execute();
-				String response = "Config updated!\n";
+				String response = command.execute() ? "command executed!\n" : "command failed!\n";
 				ctx.writeAndFlush(response);
 			}
 		}
@@ -165,11 +165,17 @@ public class TerminalServer {
 			}
 		}
 
-		public void execute() {
+		public boolean execute() {
 			Map<String, String> configs = PropertiesUtils.properties();
 			configs.put(this.key, this.value);
 			TerminalServer.this.config.config(configs);
-			TerminalServer.this.configSync.sync();
+			try {
+				TerminalServer.this.configSync.sync();
+            } catch (Exception e) {
+            	TerminalServer.LOGGER.error("Command execute failed:" , e);
+	            return false;
+            }
+			return true;
 		}
 
 		public boolean valid() {
