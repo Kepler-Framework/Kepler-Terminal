@@ -53,6 +53,15 @@
   `int型，默认1024。命令的最大长度`  
   `作用于Server` 
 
+## 使用方式 ##
+在服务所在的主机下使用telnet连接到该服务：
+
+`telnet 127.0.0.1 8888`
+
+连接成功后输入以下格式的命令：
+
+`set key=value`
+
 ## 例子 ##
 
 @See[<a href="https://github.com/Kepler-Framework/Kepler-Example/tree/master/config">Config</a>]
