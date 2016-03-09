@@ -11,12 +11,14 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.util.internal.StringUtil;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.kepler.config.PropertiesUtils;
 import com.kepler.connection.impl.ExceptionListener;
+import com.kepler.org.apache.commons.lang.StringUtils;
 import com.kepler.terminal.CommandWriter;
 import com.kepler.terminal.Commands;
 
@@ -121,7 +123,12 @@ public class TerminalServer {
 		public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 			TerminalServer.LOGGER.info("Receive the command: " + msg + " ... ");
 			// 切分请求
-			String[] args = String.class.cast(msg).split(" ");
+			String message = String.class.cast(msg);
+			if (StringUtils.isEmpty(message.trim())) {
+				return;
+			}
+			String[] args = message.split(" ");
+			
 			// 获取解析器并执行
 			TerminalServer.this.commands.get(args[0]).command(this, args);
 		}

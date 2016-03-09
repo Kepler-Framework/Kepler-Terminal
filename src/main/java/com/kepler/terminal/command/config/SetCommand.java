@@ -31,6 +31,10 @@ public class SetCommand implements Command {
 
 	public void command(CommandWriter writer, String[] args) throws Exception {
 		// 获取内存快照
+		if (args.length < 4) {
+			writer.write("Errors! set command requires two parameter.\r\n");
+			return;
+		}
 		Map<String, String> configs = PropertiesUtils.memory();
 		// 修改内存快照
 		configs.put(args[2], args[3]);
