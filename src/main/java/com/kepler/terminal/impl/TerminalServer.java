@@ -1,5 +1,7 @@
 package com.kepler.terminal.impl;
 
+import java.util.Arrays;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -11,6 +13,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -128,7 +131,7 @@ public class TerminalServer {
 			String[] args = message.split(" ");
 			
 			// 获取解析器并执行
-			TerminalServer.this.commands.get(args[0]).command(this, args);
+			TerminalServer.this.commands.get(args[0]).command(this, Arrays.copyOfRange(args, 1, args.length));
 		}
 	}
 }

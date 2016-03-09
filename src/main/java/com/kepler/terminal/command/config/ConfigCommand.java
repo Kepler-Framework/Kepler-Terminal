@@ -1,5 +1,6 @@
 package com.kepler.terminal.command.config;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,17 +31,17 @@ public class ConfigCommand implements Command {
 
 	@Override
 	public void command(CommandWriter writer, String[] args) throws Exception {		
-		if(args.length <= 1){
+		if(args.length == 0){
 			writer.write(this.subCommands() + "\r\n");
 			return;
 		}
 		// 获取分支
-		Command command = this.commands.get(args[1]);
+		Command command = this.commands.get(args[0]);
 		if (command != null) {
-			command.command(writer, args);
+			command.command(writer, Arrays.copyOfRange(args, 1, args.length));
 		} else {
 			// 提示不支持操作
-			writer.write(ConfigCommand.WARNING + args[1] + "\r\n");
+			writer.write(ConfigCommand.WARNING + args[0] + "\r\n");
 		}
 	}
 

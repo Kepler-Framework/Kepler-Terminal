@@ -31,14 +31,14 @@ public class SetCommand implements Command {
 	}
 
 	public void command(CommandWriter writer, String[] args) throws Exception {
-		if(args.length < 4){
+		if(args.length != 2){
 			writer.write(SetCommand.USAGE + "\r\n");
 			return;
 		}
 		// 获取内存快照
 		Map<String, String> configs = PropertiesUtils.memory();
 		// 修改内存快照
-		configs.put(args[2], args[3]);
+		configs.put(args[0], args[1]);
 		// 通知新配置
 		this.config.config(configs);
 		// 同步ZK

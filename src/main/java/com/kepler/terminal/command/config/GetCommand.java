@@ -20,12 +20,12 @@ public class GetCommand implements Command {
 	@Override
 	public void command(CommandWriter writer, String[] args) throws Exception {
 		Map<String, String> configs = PropertiesUtils.memory();
-		writer.write(args.length > 2 ? this.some(configs, args) : this.all(configs));
+		writer.write(args.length > 0 ? this.some(configs, args) : this.all(configs));
 	}
 
 	private String some(Map<String, String> configs, String[] args){
 		StringBuffer buffer = new StringBuffer();
-		for(int i = 2; i < args.length; i++){
+		for(int i = 0; i < args.length; i++){
 			buffer.append(args[i]).append("\t\t").append(configs.get(args[i].toLowerCase())).append("\r\n\r\n");
 		}
 		return buffer.toString();

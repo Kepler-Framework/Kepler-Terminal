@@ -14,7 +14,7 @@ import com.kepler.terminal.Commands;
  */
 public class DefaultCommands implements Commands {
 
-	private static final String WARNING = "Unvalid operation: ";
+	private static final String WARNING = "Unvalid operation";
 
 	private final Map<String, Command> commands = new HashMap<String, Command>();
 
@@ -36,7 +36,7 @@ public class DefaultCommands implements Commands {
 
 		@Override
 		public void command(CommandWriter writer, String[] args) throws Exception {
-			writer.write(DefaultCommands.WARNING + args[0] + "\r\n\r\n");
+			writer.write(DefaultCommands.WARNING + "\r\n\r\n");
 		}
 
 		@Override
