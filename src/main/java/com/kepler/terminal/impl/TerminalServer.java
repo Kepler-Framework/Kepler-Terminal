@@ -64,10 +64,14 @@ public class TerminalServer {
 		// Parent-Child使用相同EventLoop
 		this.bootstrap.group(this.eventloop, this.eventloop).channel(NioServerSocketChannel.class).childHandler(new ChannelInitializer<SocketChannel>() {
 			public void initChannel(SocketChannel ch) throws Exception {
-				ch.pipeline().addLast(new LineBasedFrameDecoder(TerminalServer.MAX_LENGTH, true, true)).addLast(TerminalServer.this.decoder).addLast(TerminalServer.this.encoder).addLast(new TerminalHandler());
+				ch.pipeline().addLast(new LineBasedFrameDecoder(TerminalServer.MAX_LENGTH, true, true));
+				ch.pipeline().addLast(TerminalServer.this.decoder);
+				ch.pipeline().addLast(TerminalServer.this.encoder);
+				ch.pipeline().addLast(new TerminalHandler());
 			}
 			// 绑定IP:PORT并同步等待连接
 		}).option(ChannelOption.SO_REUSEADDR, true).bind(TerminalServer.IP, TerminalServer.PORT).sync();
+		TerminalServer.LOGGER.info("Terminal started ...");
 	}
 
 	public void destroy() throws Exception {
@@ -95,7 +99,6 @@ public class TerminalServer {
 			// 是否允许建立连接, 动态参数
 			if (!PropertiesUtils.get(TerminalServer.class.getName().toLowerCase() + ".enabled", true)) {
 				ctx.close().addListener(ExceptionListener.TRACE);
-				;
 			}
 			this.context = ctx;
 			TerminalServer.LOGGER.info("Connect active (" + ctx.channel().localAddress() + " to " + ctx.channel().remoteAddress() + ") ...");
