@@ -4,9 +4,10 @@
     http://www.springframework.org/schema/util
 	http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-	<bean class="com.kepler.terminal.TerminalServer" init-method="init" destroy-method="destroy">
-		<constructor-arg ref="kepler.zookeeper.context" />
-		<constructor-arg ref="kepler.config" />
+	<import resource="kepler-terminal-command.xml" />
+
+	<bean class="com.kepler.terminal.impl.TerminalServer" init-method="init" destroy-method="destroy">
+		<constructor-arg ref="kepler.commands" />
 	</bean>
 
 </beans>
