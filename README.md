@@ -44,7 +44,7 @@
   `boolean型，默认true。terminal 服务开关`  
   `作用于Server`
 + com.kepler.terminal.TerminalServer.port   
-  `int型，默认8888。terminal 服务端口号`  
+  `int型，默认12345。terminal 服务端口号`  
   `作用于Server` 
 + com.kepler.terminal.TerminalServer.ip   
   `String型，默认127.0.0.1。terminal 服务綁定的本地ip`  
@@ -56,11 +56,22 @@
 ## 使用方式 ##
 在服务所在的主机下使用telnet连接到该服务：
 
-`telnet 127.0.0.1 8888`
+`telnet 127.0.0.1 12345`
 
-连接成功后输入以下格式的命令：
+连接成功后输入命令，如：
 
-`set key=value`
+`config set key=value`
+
+## 命令 ##
+
++ config   
+   - set key=value   
+     `config set key=value`   
+   - get [key]
+      - `打印所有的配置：`   
+         `config get`   
+      - `打印指定的配置：`   
+         `config get key1 key2 key3`   
 
 ## 例子 ##
 
