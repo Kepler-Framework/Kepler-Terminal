@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import com.kepler.config.Config;
 import com.kepler.config.ConfigSync;
 import com.kepler.config.PropertiesUtils;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -30,7 +31,7 @@ public class TerminalServer {
 
 	private static final Log LOGGER = LogFactory.getLog(TerminalServer.class);
 
-	public static final String LOOP = "127.0.0.1";
+	private static final String LOOP = "127.0.0.1";
 
 	/**
 	 * Terminal 服务开关
@@ -79,14 +80,21 @@ public class TerminalServer {
 			TerminalServer.LOGGER.warn("TerminalServer is not enabled!");
 			return;
 		}
-		this.bootstrap.group(new NioEventLoopGroup(1), new NioEventLoopGroup(1)).channel(NioServerSocketChannel.class)
-		        .childHandler(new ChannelInitializer<SocketChannel>() {
-			        @Override
-			        public void initChannel(SocketChannel ch) throws Exception {
-				        ch.pipeline().addLast(new LineBasedFrameDecoder(TerminalServer.CMD_MAX_LENGTH, true, true))
-				                .addLast(new StringDecoder()).addLast(new StringEncoder()).addLast(new ConfigHandler());
-			        }
-		        }).option(ChannelOption.SO_REUSEADDR, true).bind(TerminalServer.IP, TerminalServer.PORT).sync();
+		this.bootstrap
+			.group(new NioEventLoopGroup(1), new NioEventLoopGroup(1))
+			.channel(NioServerSocketChannel.class)
+	        .childHandler(new ChannelInitializer<SocketChannel>() {
+		        @Override
+		        public void initChannel(SocketChannel ch) throws Exception {
+			        ch.pipeline()
+			        	//	Inbound handler
+			        	.addLast(new LineBasedFrameDecoder(TerminalServer.CMD_MAX_LENGTH, true, true))
+			        	.addLast(new StringDecoder())
+			        	.addLast(new ConfigHandler())
+			        	//	Oubtount Handler
+			        	.addLast(new StringEncoder());
+		        }
+	        }).option(ChannelOption.SO_REUSEADDR, true).bind(TerminalServer.IP, TerminalServer.PORT).sync();
 
 	}
 
@@ -105,16 +113,16 @@ public class TerminalServer {
 			String cmdLine = String.class.cast(msg);
 			TerminalServer.LOGGER.info("Receive the command:" + cmdLine);
 			if (TerminalServer.CMD_QUIT.equalsIgnoreCase(cmdLine)) {
-				ctx.writeAndFlush("Exit...");
+				ctx.pipeline().writeAndFlush("Exit...");
 				ctx.close();
 				return;
 			}
 			Command command = new Command(cmdLine);
 			if (!command.valid()) {
-				ctx.writeAndFlush(TerminalServer.USAGE);
+				ctx.pipeline().writeAndFlush(TerminalServer.USAGE);
 			} else {
 				String response = command.execute() ? "command executed!\n" : "command failed!\n";
-				ctx.writeAndFlush(response);
+				ctx.pipeline().writeAndFlush(response);
 			}
 		}
 
@@ -129,7 +137,7 @@ public class TerminalServer {
 			String local = ctx.channel().localAddress().toString();
 			String target = ctx.channel().remoteAddress().toString();
 			TerminalServer.LOGGER.info("ConfigHandler:Connect active (" + local + " to " + target + ") ...");
-			ctx.writeAndFlush(TerminalServer.USAGE);
+			ctx.pipeline().writeAndFlush(TerminalServer.USAGE);
 			ctx.fireChannelActive();
 		}
 
@@ -144,6 +152,7 @@ public class TerminalServer {
 
 	private class Command {
 
+		@SuppressWarnings("unused")
 		private String cmd;
 
 		private String key;
