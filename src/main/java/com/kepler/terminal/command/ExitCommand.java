@@ -1,6 +1,5 @@
 package com.kepler.terminal.command;
 
-import com.kepler.terminal.Command;
 import com.kepler.terminal.CommandWriter;
 
 /**
@@ -10,17 +9,27 @@ import com.kepler.terminal.CommandWriter;
  *
  * 2016年3月8日
  */
-public class ExitCommand implements Command {
+public class ExitCommand extends AbstractLeafCommand {
 
 	private static final String PREFIX = "exit";
-
-	@Override
-	public void command(CommandWriter writer, String[] args) throws Exception {
-		writer.close();
-	}
 
 	@Override
 	public String prefix() {
 		return ExitCommand.PREFIX;
 	}
+
+	@Override
+    public String usage() {
+	    return null;
+    }
+
+	@Override
+    protected boolean valid(String[] args) {
+	    return true;
+    }
+
+	@Override
+    protected void execute(CommandWriter writer, String[] args) throws Exception {
+		writer.close();	    
+    }
 }
