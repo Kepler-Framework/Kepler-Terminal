@@ -95,7 +95,7 @@ public class TerminalServer {
 			        	.addLast(new StringEncoder());
 		        }
 	        }).option(ChannelOption.SO_REUSEADDR, true).bind(TerminalServer.IP, TerminalServer.PORT).sync();
-
+		TerminalServer.LOGGER.info("Terminal Server started ... ");
 	}
 
 	public void destroy() throws Exception {
