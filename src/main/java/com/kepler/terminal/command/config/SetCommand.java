@@ -19,6 +19,7 @@ public class SetCommand implements Command {
 
 	private static final String PREFIX = "set";
 
+	private static final String USAGE = "Usage:config set key value";
 	private final ConfigSync sync;
 
 	private final Config config;
@@ -30,11 +31,11 @@ public class SetCommand implements Command {
 	}
 
 	public void command(CommandWriter writer, String[] args) throws Exception {
-		// 获取内存快照
-		if (args.length < 4) {
-			writer.write("Errors! set command requires two parameter.\r\n");
+		if(args.length < 4){
+			writer.write(SetCommand.USAGE + "\r\n");
 			return;
 		}
+		// 获取内存快照
 		Map<String, String> configs = PropertiesUtils.memory();
 		// 修改内存快照
 		configs.put(args[2], args[3]);
@@ -42,8 +43,6 @@ public class SetCommand implements Command {
 		this.config.config(configs);
 		// 同步ZK
 		this.sync.sync();
-		// 更新本地配置
-		PropertiesUtils.properties(configs);
 		writer.write("\r\n\r\n");
 	}
 

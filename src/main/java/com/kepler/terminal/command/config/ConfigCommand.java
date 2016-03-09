@@ -29,7 +29,11 @@ public class ConfigCommand implements Command {
 	}
 
 	@Override
-	public void command(CommandWriter writer, String[] args) throws Exception {
+	public void command(CommandWriter writer, String[] args) throws Exception {		
+		if(args.length <= 1){
+			writer.write(this.subCommands() + "\r\n");
+			return;
+		}
 		// 获取分支
 		Command command = this.commands.get(args[1]);
 		if (command != null) {
@@ -43,5 +47,10 @@ public class ConfigCommand implements Command {
 	@Override
 	public String prefix() {
 		return ConfigCommand.PREFIX;
+	}
+	
+	private String subCommands(){
+		return "config only support: " + this.commands.keySet().toString(); 
+		
 	}
 }
