@@ -1,10 +1,12 @@
 package com.kepler.terminal.command.config;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import com.kepler.config.Config;
 import com.kepler.config.ConfigSync;
 import com.kepler.config.PropertiesUtils;
+import com.kepler.org.apache.commons.lang.StringUtils;
 import com.kepler.terminal.CommandWriter;
 import com.kepler.terminal.command.AbstractLeafCommand;
 
@@ -33,7 +35,11 @@ public class SetCommand extends AbstractLeafCommand {
 
 	@Override
 	protected boolean valid(String[] args) {
-		return args.length == 2;
+		return args.length >= 2;
+	}
+
+	private String value(String[] args) {
+		return StringUtils.join(args, " ");
 	}
 
 	@Override
@@ -41,7 +47,7 @@ public class SetCommand extends AbstractLeafCommand {
 		// 获取内存快照
 		Map<String, String> configs = PropertiesUtils.memory();
 		// 修改内存快照
-		configs.put(args[0], args[1]);
+		configs.put(args[0], this.value(Arrays.copyOfRange(args, 1, args.length)));
 		// 通知新配置
 		this.config.config(configs);
 		// 同步ZK
