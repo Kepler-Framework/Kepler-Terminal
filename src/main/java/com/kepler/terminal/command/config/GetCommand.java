@@ -3,8 +3,8 @@ package com.kepler.terminal.command.config;
 import java.util.Map;
 
 import com.kepler.config.PropertiesUtils;
-import com.kepler.terminal.Command;
 import com.kepler.terminal.CommandWriter;
+import com.kepler.terminal.command.AbstractLeafCommand;
 
 /**
  * 获取参数集合
@@ -13,15 +13,22 @@ import com.kepler.terminal.CommandWriter;
  *
  * 2016年3月9日
  */
-public class GetCommand implements Command {
+public class GetCommand extends AbstractLeafCommand {
 
 	private static final String PREFIX = "get";
-
+	
+	private static final String USAGE = "Usage:config get [key1] [key2] [key3]...";
+	
 	@Override
-	public void command(CommandWriter writer, String[] args) throws Exception {
+    protected boolean valid(String[] args) {
+	    return true;
+    }
+	
+	@Override
+    protected void execute(CommandWriter writer, String[] args) throws Exception {
 		Map<String, String> configs = PropertiesUtils.memory();
 		writer.write(args.length > 0 ? this.some(configs, args) : this.all(configs));
-	}
+    }
 
 	private String some(Map<String, String> configs, String[] args){
 		StringBuffer buffer = new StringBuffer();
@@ -43,4 +50,10 @@ public class GetCommand implements Command {
 	public String prefix() {
 		return GetCommand.PREFIX;
 	}
+
+	@Override
+    public String usage() {
+	    return GetCommand.USAGE;
+    }
+
 }

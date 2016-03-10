@@ -19,4 +19,10 @@ public interface Command {
 	 * @return
 	 */
 	public String prefix();
+	
+	/**
+	 * 使用方法
+	 * @return
+	 */
+	public String usage();
 }

@@ -14,7 +14,7 @@ import com.kepler.terminal.Commands;
  */
 public class DefaultCommands implements Commands {
 
-	private static final String WARNING = "Unvalid operation";
+	private static final String WARNING = "Invalid operation";
 
 	private final Map<String, Command> commands = new HashMap<String, Command>();
 
@@ -43,5 +43,10 @@ public class DefaultCommands implements Commands {
 		public String prefix() {
 			return null;
 		}
+
+		@Override
+        public String usage() {
+	        return null;
+        }
 	}
 }
