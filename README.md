@@ -72,6 +72,8 @@
          `config get`   
       - `打印指定的配置：`   
          `config get key1 key2 key3`   
++ exit   
+  `退出`
 
 ## 例子 ##
 
