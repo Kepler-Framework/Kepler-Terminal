@@ -36,7 +36,7 @@ public class DefaultCommands implements Commands {
 
 		@Override
 		public void command(CommandWriter writer, String[] args) throws Exception {
-			writer.write(DefaultCommands.WARNING + "\r\n\r\n");
+			writer.write(DefaultCommands.WARNING);
 		}
 
 		@Override

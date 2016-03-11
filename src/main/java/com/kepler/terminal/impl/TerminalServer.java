@@ -105,6 +105,7 @@ public class TerminalServer {
 			}
 			this.context = ctx;
 			TerminalServer.LOGGER.info("Connect active (" + ctx.channel().localAddress() + " to " + ctx.channel().remoteAddress() + ") ...");
+			ctx.writeAndFlush("\r\n>>");
 			ctx.fireChannelActive();
 		}
 
@@ -132,6 +133,7 @@ public class TerminalServer {
 			
 			// 获取解析器并执行
 			TerminalServer.this.commands.get(args[0]).command(this, Arrays.copyOfRange(args, 1, args.length));
+			ctx.writeAndFlush("\r\n>>");
 		}
 	}
 }

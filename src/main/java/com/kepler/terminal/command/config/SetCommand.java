@@ -52,7 +52,7 @@ public class SetCommand extends AbstractLeafCommand {
 		this.config.config(configs);
 		// 同步ZK
 		this.sync.sync();
-		writer.write("\r\n\r\n");
+		writer.write("Updated!");
 
 	}
 

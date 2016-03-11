@@ -14,13 +14,13 @@ public abstract class AbstractNoneLeafCommand implements Command {
 	@Override
 	public void command(CommandWriter writer, String[] args) throws Exception {
 		if (!this.valid(args)) {
-			writer.write(this.usage() + "\r\n");
+			writer.write(this.usage());
 		} else {
 			Command command = this.getSubCommand(args);
 			if (command != null) {
 				command.command(writer, Arrays.copyOfRange(args, 1, args.length));
 			} else {
-				writer.write(this.usage() + "\r\n");
+				writer.write(this.usage());
 			}
 		}
 

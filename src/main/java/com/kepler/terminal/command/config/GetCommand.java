@@ -33,7 +33,7 @@ public class GetCommand extends AbstractLeafCommand {
 	private String some(Map<String, String> configs, String[] args){
 		StringBuffer buffer = new StringBuffer();
 		for(int i = 0; i < args.length; i++){
-			buffer.append(args[i]).append("\t\t").append(configs.get(args[i].toLowerCase())).append("\r\n\r\n");
+			buffer.append(args[i]).append("=").append(configs.get(args[i].toLowerCase())).append("\r\n\r\n");
 		}
 		return buffer.toString();
 	}
@@ -41,7 +41,7 @@ public class GetCommand extends AbstractLeafCommand {
 	private String all(Map<String, String> configs){
 		StringBuffer buffer = new StringBuffer();
 		for (String key : configs.keySet()) {
-			buffer.append(key).append("\t\t").append(configs.get(key)).append("\r\n\r\n");
+			buffer.append(key).append("=").append(configs.get(key)).append("\r\n\r\n");
 		}
 		return buffer.toString();
 	}

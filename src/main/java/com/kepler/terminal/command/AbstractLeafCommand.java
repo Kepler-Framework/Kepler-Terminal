@@ -12,7 +12,7 @@ public abstract class AbstractLeafCommand implements Command{
 	@Override
     public void command(CommandWriter writer, String[] args) throws Exception {
 	    if (!this.valid(args)) {
-	    	writer.write(this.usage() + "\r\n");
+	    	writer.write(this.usage());
         }else{
         	this.execute(writer, args);;
         }
